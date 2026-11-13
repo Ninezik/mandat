@@ -3,13 +3,20 @@ RETURNS VARCHAR(20)
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_nomor VARCHAR(20);
+    v_nomor BIGINT;
 BEGIN
-    v_nomor :=
-        'P'
-        || TO_CHAR(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Jakarta', 'YYMMDD')
-        || LPAD(NEXTVAL('seq_no_resi')::TEXT, 6, '0');
+    v_nomor := NEXTVAL('testing2_seq_no_resi');
 
-    RETURN v_nomor;
+    RETURN
+        'P'
+        || TO_CHAR(
+            CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Jakarta',
+            'YYMMDD'
+        )
+        || LPAD(
+            v_nomor::TEXT,
+            GREATEST(6, LENGTH(v_nomor::TEXT)),
+            '0'
+        );
 END;
 $$;
